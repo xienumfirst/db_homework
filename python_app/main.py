@@ -87,9 +87,9 @@ def create_intention_customer(sales_id: int) -> None:
                 )
             conn.commit()
             print(f"创建成功，客户ID={customer_id}")
-        except Exception:
+        except Exception as ex:
             conn.rollback()
-            raise
+            raise RuntimeError(f'创建意向客户失败: {ex}') from ex
 
 
 def create_sales_order(sales_id: int) -> None:
@@ -123,9 +123,9 @@ def create_sales_order(sales_id: int) -> None:
             conn.commit()
             print("创建订单成功:")
             print_rows(result)
-        except Exception:
+        except Exception as ex:
             conn.rollback()
-            raise
+            raise RuntimeError(f'创建销售订单失败: {ex}') from ex
 
 
 def query_my_orders(sales_id: int) -> None:
@@ -166,9 +166,9 @@ def vehicle_inbound() -> None:
                 )
             conn.commit()
             print("车辆入库成功")
-        except Exception:
+        except Exception as ex:
             conn.rollback()
-            raise
+            raise RuntimeError(f'车辆入库失败: {ex}') from ex
 
 
 def query_inventory() -> None:
