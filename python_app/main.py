@@ -1,6 +1,8 @@
 import json
 import os
-from typing import Any, Dict, List, Tuple
+from datetime import date
+from decimal import Decimal, InvalidOperation
+from typing import Any, Dict, List
 
 import pymysql
 
@@ -38,6 +40,14 @@ def print_rows(rows: List[Dict[str, Any]]) -> None:
     print("-" * 100)
     for row in rows:
         print(" | ".join(str(row.get(h, "")) for h in headers))
+
+
+def read_decimal(prompt: str, default: str = "0") -> Decimal:
+    raw_value = input(prompt).strip() or default
+    try:
+        return Decimal(raw_value)
+    except InvalidOperation as ex:
+        raise ValueError(f"金额格式不正确: {raw_value}") from ex
 
 
 def sales_login() -> int:
@@ -95,11 +105,11 @@ def create_intention_customer(sales_id: int) -> None:
 def create_sales_order(sales_id: int) -> None:
     customer_id = int(input("客户ID: ").strip())
     vin = input("车辆VIN: ").strip()
-    vehicle_amount = float(input("车辆成交价: ").strip())
-    option_amount = float(input("选装金额(可为0): ").strip() or "0")
-    insurance_amount = float(input("保险金额(可为0): ").strip() or "0")
-    discount_amount = float(input("折扣金额(可为0): ").strip() or "0")
-    deposit_amount = float(input("定金金额(可为0): ").strip() or "0")
+    vehicle_amount = read_decimal("车辆成交价: ")
+    option_amount = read_decimal("选装金额(可为0): ")
+    insurance_amount = read_decimal("保险金额(可为0): ")
+    discount_amount = read_decimal("折扣金额(可为0): ")
+    deposit_amount = read_decimal("定金金额(可为0): ")
     payment_method = input("付款方式(现金/贷款/分期/转账): ").strip() or "转账"
 
     with get_connection() as conn:
@@ -150,8 +160,8 @@ def vehicle_inbound() -> None:
     engine_no = input("发动机号: ").strip()
     production_date = input("生产日期(YYYY-MM-DD): ").strip()
     inbound_date = input("入库日期(YYYY-MM-DD): ").strip()
-    procurement_cost = float(input("采购成本: ").strip())
-    suggested_price = float(input("建议零售价: ").strip())
+    procurement_cost = read_decimal("采购成本: ")
+    suggested_price = read_decimal("建议零售价: ")
 
     with get_connection() as conn:
         try:
@@ -214,18 +224,30 @@ def view_inventory_warning() -> None:
 def query_sales_ranking() -> None:
     year = int(input("年份(如2026): ").strip())
     quarter = int(input("季度(1-4): ").strip())
-    period = f"{year}-Q{quarter}"
+    start_month = (quarter - 1) * 3 + 1
+    start_date = date(year, start_month, 1)
+    end_date = date(year + 1, 1, 1) if quarter == 4 else date(year, start_month + 3, 1)
 
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT employee_name, order_count, sales_amount, gross_profit
-                FROM v_sales_performance
-                WHERE stat_quarter = %s
-                ORDER BY sales_amount DESC
+                SELECT
+                    e.employee_name,
+                    COUNT(*) AS order_count,
+                    COALESCE(SUM(so.total_amount), 0) AS sales_amount,
+                    COALESCE(SUM(so.total_amount - v.procurement_cost), 0) AS gross_profit,
+                    DENSE_RANK() OVER (ORDER BY COALESCE(SUM(so.total_amount), 0) DESC) AS sales_rank
+                FROM sales_orders so
+                JOIN employees e ON so.sales_consultant_id = e.employee_id
+                JOIN inventory_vehicles v ON so.vin = v.vin
+                WHERE so.order_status = '已完成'
+                  AND so.created_at >= %s
+                  AND so.created_at < %s
+                GROUP BY e.employee_id, e.employee_name
+                ORDER BY sales_rank
                 """,
-                (period,),
+                (start_date, end_date),
             )
             print_rows(cur.fetchall())
 

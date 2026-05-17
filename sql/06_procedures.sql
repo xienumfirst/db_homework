@@ -18,10 +18,20 @@ BEGIN
     DECLARE v_vehicle_status VARCHAR(20);
     DECLARE v_total_amount DECIMAL(12,2);
 
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
     SET v_total_amount = p_vehicle_amount + p_option_amount + p_insurance_amount - p_discount_amount;
 
     IF v_total_amount < 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '订单总金额不能为负数';
+    END IF;
+
+    IF p_deposit_amount < 0 OR p_deposit_amount > v_total_amount THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '定金金额必须大于等于0且不超过订单总金额';
     END IF;
 
     START TRANSACTION;
@@ -32,12 +42,10 @@ BEGIN
     FOR UPDATE;
 
     IF v_vehicle_status IS NULL THEN
-        ROLLBACK;
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '创建订单失败：车辆不存在';
     END IF;
 
     IF v_vehicle_status <> '在库' THEN
-        ROLLBACK;
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '创建订单失败：车辆不是在库状态';
     END IF;
 

@@ -70,22 +70,22 @@ GROUP BY b.brand_name, m.series_name, m.model_year, m.trim_name
 ORDER BY sold_count DESC
 LIMIT 5;
 
--- Q4: 查询库存周期超过90天的滞销车辆
+-- Q4: 查询库存周期超过90天的滞销车辆（已售车辆按售出日计算，未售库存按当前日期计算）
 SELECT
     v.vin,
     b.brand_name,
     m.series_name,
     m.trim_name,
+    v.status,
     v.inbound_date,
     v.sold_at,
-    DATEDIFF(v.sold_at, v.inbound_date) AS inventory_days
+    DATEDIFF(COALESCE(v.sold_at, NOW()), v.inbound_date) AS inventory_days
 FROM inventory_vehicles v
 JOIN car_models m ON v.model_id = m.model_id
 JOIN brands b ON m.brand_id = b.brand_id
-WHERE v.status = '已售出'
+WHERE v.status <> '在途'
   AND v.inbound_date IS NOT NULL
-  AND v.sold_at IS NOT NULL
-  AND DATEDIFF(v.sold_at, v.inbound_date) > 90
+  AND DATEDIFF(COALESCE(v.sold_at, NOW()), v.inbound_date) > 90
 ORDER BY inventory_days DESC;
 
 -- Q5: 根据客户历史消费总额进行分层

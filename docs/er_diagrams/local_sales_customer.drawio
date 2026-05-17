@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="Database Course Design">
+  <diagram name="销售与客户模块局部E-R图" id="local-sales-customer-er">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="销售与客户模块局部E-R图" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="30" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="customers" value="客户&lt;br&gt;&lt;u&gt;客户ID&lt;/u&gt;&lt;br&gt;姓名 / 手机号 / 身份证号&lt;br&gt;来源渠道 / 首次到店日期" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="300" width="190" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="intentions" value="客户意向&lt;br&gt;&lt;u&gt;意向ID&lt;/u&gt;&lt;br&gt;意向级别 / 备注&lt;br&gt;下次联系时间" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="130" width="180" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="models" value="车型&lt;br&gt;&lt;u&gt;车型ID&lt;/u&gt;&lt;br&gt;车系 / 年款 / 配置&lt;br&gt;指导价 / 车型类型" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="790" y="120" width="190" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="employees" value="员工&lt;br&gt;&lt;u&gt;员工ID&lt;/u&gt;&lt;br&gt;工号 / 姓名 / 角色&lt;br&gt;部门 / 上级主管" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="790" y="500" width="190" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="orders" value="销售订单&lt;br&gt;&lt;u&gt;订单号&lt;/u&gt;&lt;br&gt;总金额 / 定金 / 付款方式&lt;br&gt;订单状态 / 创建时间 / 交车时间" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="490" width="210" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="order_items" value="订单明细&lt;br&gt;&lt;u&gt;明细ID&lt;/u&gt;&lt;br&gt;明细类型 / 项目描述 / 金额" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="720" width="190" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_owns" value="拥有" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="205" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_intended" value="意向车型" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="680" y="150" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_follow" value="跟进" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="690" y="310" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_places" value="下单" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="480" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_handles" value="处理" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="690" y="520" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_contains" value="包含" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="500" y="640" width="90" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="1" edge="1" parent="1" source="customers" target="rel_owns" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="N" edge="1" parent="1" source="rel_owns" target="intentions" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="1" edge="1" parent="1" source="models" target="rel_intended" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="N" edge="1" parent="1" source="rel_intended" target="intentions" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="1" edge="1" parent="1" source="employees" target="rel_follow" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="N" edge="1" parent="1" source="rel_follow" target="intentions" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" value="1" edge="1" parent="1" source="customers" target="rel_places" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e8" value="N" edge="1" parent="1" source="rel_places" target="orders" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9" value="1" edge="1" parent="1" source="employees" target="rel_handles" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" value="N" edge="1" parent="1" source="rel_handles" target="orders" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e11" value="1" edge="1" parent="1" source="orders" target="rel_contains" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e12" value="N" edge="1" parent="1" source="rel_contains" target="order_items" style="edgeStyle=none;html=1;endArrow=none;strokeColor=#b85450;fontSize=12"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
