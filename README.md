@@ -34,7 +34,7 @@
    python main.py
    ```
 
-## Data download（故障排查）
+## 数据下载（故障排查）
 
 如果你使用的是历史保存的 S3 预签名 URL，出现 `AccessDenied` / `Request has expired` 通常是因为链接中的 `X-Amz-Expires` 已到期。预签名 URL 本身是临时授权，不可长期复用。
 
