@@ -33,3 +33,23 @@
    cd python_app
    python main.py
    ```
+
+## Data download / 数据下载（故障排查）
+
+如果你使用的是历史保存的 S3 预签名 URL，出现 `AccessDenied` / `Request has expired` 通常是因为链接中的 `X-Amz-Expires` 已到期。预签名 URL 本身是临时授权，不可长期复用。
+
+- 重新获取可用链接：
+  - 回到原始数据集发布页面，复制最新下载链接；
+  - 或回到项目 README / 文档中的数据下载入口，使用当前提供的链接。
+- 使用建议：
+  - 文档中优先保留稳定入口链接（数据集主页），避免直接长期保存单个预签名 URL；
+  - 如需自动化下载，建议用脚本从稳定入口获取/刷新最新可用下载地址后再拉取文件。
+
+### 截图说明
+
+建议在提交问题或复现记录时附上两类截图（可脱敏）：
+
+1. 过期链接报错页面（包含 `AccessDenied` 或 `Request has expired` 关键信息）；
+2. 从数据集页面/README 重新获取新链接后可正常下载的页面。
+
+可参考命名：`docs/images/system_test/S4_data_download_presigned_url_expired.png`（若目录不存在可先创建）。
